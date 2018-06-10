@@ -1,6 +1,8 @@
 package com.pasha.ui;
 
 import com.pasha.entity.MatchCombined;
+import com.pasha.entity.external.stats.ExtStats;
+import com.pasha.service.Downloader;
 import com.pasha.service.MatchCombinedService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -45,26 +47,26 @@ public class MainController {
         data = FXCollections.observableArrayList(contacts);
 
         // Столбцы таблицы
+        TableColumn<MatchCombined, String> colId = new TableColumn<>("ID");
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+
         TableColumn<MatchCombined, String> colPK = new TableColumn<>("pK");
-        colPK.setCellValueFactory(new PropertyValueFactory<>("pK"));
+        colPK.setCellValueFactory(new PropertyValueFactory<>("pk"));
 
         TableColumn<MatchCombined, String> colPD = new TableColumn<>("pD");
-        colPK.setCellValueFactory(new PropertyValueFactory<>("pD"));
+        colPD.setCellValueFactory(new PropertyValueFactory<>("pd"));
 
         TableColumn<MatchCombined, String> colPKD = new TableColumn<>("pKD");
-        colPK.setCellValueFactory(new PropertyValueFactory<>("pKD"));
-
-        TableColumn<MatchCombined, String> colId = new TableColumn<>("ID");
-        colPK.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colPKD.setCellValueFactory(new PropertyValueFactory<>("pkd"));
 
         TableColumn<MatchCombined, String> colDK = new TableColumn<>("dK");
-        colPK.setCellValueFactory(new PropertyValueFactory<>("dK"));
+        colDK.setCellValueFactory(new PropertyValueFactory<>("dk"));
 
         TableColumn<MatchCombined, String> colDD = new TableColumn<>("dD");
-        colPK.setCellValueFactory(new PropertyValueFactory<>("dD"));
+        colDD.setCellValueFactory(new PropertyValueFactory<>("dd"));
 
         TableColumn<MatchCombined, String> colDKD = new TableColumn<>("dKD");
-        colPK.setCellValueFactory(new PropertyValueFactory<>("dKD"));
+        colDKD.setCellValueFactory(new PropertyValueFactory<>("dkd"));
 
 
         table.getColumns().setAll(colPK, colPD, colPKD, colId, colDK, colDD, colDKD);
@@ -79,7 +81,11 @@ public class MainController {
         downloadButton.setText("Стоп");
         new Thread(() -> {
             downloadButton.setOnAction((ActionEvent) -> { stopped = true; });
+            Platform.runLater(() -> progressBar.setProgress(0));
+            data.clear();
             contactService.deleteAll();
+
+            ExtStats extStats = new Downloader<ExtStats>(ExtStats.class).downloadUrl();
 
             int max = 20000;
             for (int i = 0; i < max; i++) {

@@ -11,34 +11,34 @@ public class MatchCombined implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
-    private Integer pK;
+    @Column(nullable = true)
+    private Integer pk;
 
-    @Column(nullable = false)
-    private Integer pD;
+    @Column(nullable = true)
+    private Integer pd;
 
-    @Column(nullable = false)
-    private Double pKD;
+    @Column(nullable = true)
+    private Double pkd;
 
-    @Column(nullable = false)
-    private Integer dK;
+    @Column(nullable = true)
+    private Integer dk;
 
-    @Column(nullable = false)
-    private Integer dD;
+    @Column(nullable = true)
+    private Integer dd;
 
-    @Column(nullable = false)
-    private Double dKD;
+    @Column(nullable = true)
+    private Double dkd;
 
     public MatchCombined() {
     }
 
-    public MatchCombined(Integer pK, Integer pD, Double pKD, Integer dK, Integer dD, Double dKD) {
-        this.pK = pK;
-        this.pD = pD;
-        this.pKD = pKD;
-        this.dK = dK;
-        this.dD = dD;
-        this.dKD = dKD;
+    public MatchCombined(Integer pk, Integer pd, Double pkd, Integer dk, Integer dd, Double dkd) {
+        this.pk = pk;
+        this.pd = pd;
+        this.pkd = pkd;
+        this.dk = dk;
+        this.dd = dd;
+        this.dkd = dkd;
     }
 
     public Long getId() {
@@ -49,51 +49,51 @@ public class MatchCombined implements Serializable {
         this.id = id;
     }
 
-    public Integer getpK() {
-        return pK;
+    public Integer getPk() {
+        return pk;
     }
 
-    public void setpK(Integer pK) {
-        this.pK = pK;
+    public void setPk(Integer pk) {
+        this.pk = pk;
     }
 
-    public Integer getpD() {
-        return pD;
+    public Integer getPd() {
+        return pd;
     }
 
-    public void setpD(Integer pD) {
-        this.pD = pD;
+    public void setPd(Integer pd) {
+        this.pd = pd;
     }
 
-    public Double getpKD() {
-        return pKD;
+    public Double getPkd() {
+        return pkd;
     }
 
-    public void setpKD(Double pKD) {
-        this.pKD = pKD;
+    public void setPkd(Double pkd) {
+        this.pkd = pkd;
     }
 
-    public Integer getdK() {
-        return dK;
+    public Integer getDk() {
+        return dk;
     }
 
-    public void setdK(Integer dK) {
-        this.dK = dK;
+    public void setDk(Integer dk) {
+        this.dk = dk;
     }
 
-    public Integer getdD() {
-        return dD;
+    public Integer getDd() {
+        return dd;
     }
 
-    public void setdD(Integer dD) {
-        this.dD = dD;
+    public void setDd(Integer dd) {
+        this.dd = dd;
     }
 
-    public Double getdKD() {
-        return dKD;
+    public Double getDkd() {
+        return dkd;
     }
 
-    public void setdKD(Double dKD) {
-        this.dKD = dKD;
+    public void setDkd(Double dkd) {
+        this.dkd = dkd;
     }
 }
