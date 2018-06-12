@@ -7,6 +7,7 @@ import com.pasha.repository.MatchCombinedRepository;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,11 +23,11 @@ public class MatchCombinedServiceImpl implements MatchCombinedService {
 
     @PostConstruct
     public void generateTestData() {
-        MatchCombined matchCombined = save(new MatchCombined(
+        MatchCombined matchCombined = save(new MatchCombined(1, LocalDateTime.of(2018, 1, 1, 12, 0),
                 (int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0,
                 (int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0));
 
-        matchCombined = save(new MatchCombined(
+        matchCombined = save(new MatchCombined(2, LocalDateTime.of(2018, 1, 1, 12, 0),
                 (int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0,
                 (int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0));
 //        save(new MatchCombined("Иван Иванов", "+123456789", "ivan@ivan.ov"));

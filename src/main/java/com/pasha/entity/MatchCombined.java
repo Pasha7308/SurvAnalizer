@@ -2,6 +2,7 @@ package com.pasha.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table
@@ -10,6 +11,12 @@ public class MatchCombined implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(nullable = false)
+    private Integer extId;
+
+    @Column(nullable = false)
+    private LocalDateTime matchDate;
 
     @Column(nullable = true)
     private Integer pk;
@@ -32,7 +39,9 @@ public class MatchCombined implements Serializable {
     public MatchCombined() {
     }
 
-    public MatchCombined(Integer pk, Integer pd, Double pkd, Integer dk, Integer dd, Double dkd) {
+    public MatchCombined(Integer extId, LocalDateTime matchDate, Integer pk, Integer pd, Double pkd, Integer dk, Integer dd, Double dkd) {
+        this.extId = extId;
+        this.matchDate = matchDate;
         this.pk = pk;
         this.pd = pd;
         this.pkd = pkd;
@@ -47,6 +56,22 @@ public class MatchCombined implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getExtId() {
+        return extId;
+    }
+
+    public void setExtId(Integer extId) {
+        this.extId = extId;
+    }
+
+    public LocalDateTime getMatchDate() {
+        return matchDate;
+    }
+
+    public void setMatchDate(LocalDateTime matchDate) {
+        this.matchDate = matchDate;
     }
 
     public Integer getPk() {
