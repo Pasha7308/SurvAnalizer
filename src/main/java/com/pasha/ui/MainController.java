@@ -2,6 +2,7 @@ package com.pasha.ui;
 
 import com.pasha.entity.MatchCombined;
 import com.pasha.entity.MatchPerson;
+import com.pasha.entity.Player;
 import com.pasha.entity.external.stats.ExtMatchStat;
 import com.pasha.entity.external.stats.ExtStats;
 import com.pasha.service.DateService;
@@ -10,7 +11,6 @@ import com.pasha.service.MatchCombinedService;
 import com.pasha.service.MatchPersonService;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,13 +21,10 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-
-import static com.pasha.entity.Player.Pasha;
 
 @SuppressWarnings("SpringJavaAutowiringInspection")
 public class MainController {
@@ -65,47 +62,22 @@ public class MainController {
         colId.setCellValueFactory(new PropertyValueFactory<>("extId"));
 
         TableColumn<MatchCombined, Integer> colPK = new TableColumn<>("pK");
-        colPK.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<MatchCombined, Integer>, ObservableValue<Integer>>() {
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<MatchCombined, Integer> p) {
-                return new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKills() : null);
-            }
-        });
+        colPK.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKills() : null));
 
         TableColumn<MatchCombined, Integer> colPD = new TableColumn<>("pD");
-        colPD.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<MatchCombined, Integer>, ObservableValue<Integer>>() {
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<MatchCombined, Integer> p) {
-                return new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getDeaths() : null);
-            }
-        });
+        colPD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getDeaths() : null));
 
         TableColumn<MatchCombined, Double> colPKD = new TableColumn<>("pKD");
-        colPKD.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<MatchCombined, Double>, ObservableValue<Double>>() {
-            public ObservableValue<Double> call(TableColumn.CellDataFeatures<MatchCombined, Double> p) {
-                return new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKd() : null);
-            }
-        });
+        colPKD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKd() : null));
 
         TableColumn<MatchCombined, Integer> colDK = new TableColumn<>("dK");
-        colDK.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<MatchCombined, Integer>, ObservableValue<Integer>>() {
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<MatchCombined, Integer> p) {
-                return new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getKills() : null);
-            }
-        });
+        colDK.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getKills() : null));
 
         TableColumn<MatchCombined, Integer> colDD = new TableColumn<>("dD");
-        colDD.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<MatchCombined, Integer>, ObservableValue<Integer>>() {
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<MatchCombined, Integer> p) {
-                return new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getDeaths() : null);
-            }
-        });
+        colDD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getDeaths() : null));
 
         TableColumn<MatchCombined, Double> colDKD = new TableColumn<>("dKD");
-        colDKD.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<MatchCombined, Double>, ObservableValue<Double>>() {
-            public ObservableValue<Double> call(TableColumn.CellDataFeatures<MatchCombined, Double> p) {
-                return new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getKd() : null);
-            }
-        });
-
+        colDKD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getKd() : null));
 
         table.getColumns().setAll(colDate, colPK, colPD, colPKD, colId, colDK, colDD, colDKD);
 
@@ -123,27 +95,35 @@ public class MainController {
             data.clear();
             matchCombinedService.deleteAll();
 
-            ExtStats extStats = new Downloader<>(ExtStats.class).downloadUrl();
-            int i = 0;
-            for (ExtMatchStat stat : extStats.getData()) {
-                MatchCombined matchCombined = new MatchCombined(stat.getMatch().getId(), dateService.jodaDateToLocalDate(stat.getDate()));
-                matchCombined.setPlayer(Pasha, matchPersonService.save(new MatchPerson(stat.getKills(), stat.getDies(), stat.getKd())));
-                matchCombinedService.save(matchCombined);
-                data.add(matchCombined);
+            downloadPlayer(Player.Pasha);
+            downloadPlayer(Player.Daniil);
 
-                double progress = i++ / extStats.getData().size();
-                Platform.runLater(() -> progressBar.setProgress(progress));
-                if (stopped) {
-                    break;
-                }
-            }
-
-            List<MatchCombined> contacts = matchCombinedService.findAll();
-            data = FXCollections.observableArrayList(contacts);
+            List<MatchCombined> matches = matchCombinedService.findAll();
+            data = FXCollections.observableArrayList(matches);
 
             downloadButton.setOnAction(action);
             Platform.runLater(() -> downloadButton.setText("Скачать"));
             stopped = false;
         }).start();
+    }
+
+    private void downloadPlayer(Player player) {
+        if (stopped) {
+            return;
+        }
+        ExtStats extStats = new Downloader<>(ExtStats.class).downloadUrl(player);
+        int i = 0;
+        for (ExtMatchStat stat : extStats.getData()) {
+            MatchCombined matchCombined = new MatchCombined(stat.getMatch().getId(), dateService.jodaDateToLocalDate(stat.getDate()));
+            matchCombined.setPlayer(player, matchPersonService.save(new MatchPerson(stat.getKills(), stat.getDies(), stat.getKd())));
+            matchCombinedService.save(matchCombined);
+            data.add(matchCombined);
+
+            double progress = i++ / extStats.getData().size();
+            Platform.runLater(() -> progressBar.setProgress(progress));
+            if (stopped) {
+                break;
+            }
+        }
     }
 }
