@@ -18,36 +18,27 @@ public class MatchCombined implements Serializable {
     @Column(nullable = false)
     private LocalDateTime matchDate;
 
-    @Column(nullable = true)
-    private Integer pk;
+    @ManyToOne
+    @JoinColumn(name = "pashaId")
+    private MatchPerson pasha;
 
-    @Column(nullable = true)
-    private Integer pd;
-
-    @Column(nullable = true)
-    private Double pkd;
-
-    @Column(nullable = true)
-    private Integer dk;
-
-    @Column(nullable = true)
-    private Integer dd;
-
-    @Column(nullable = true)
-    private Double dkd;
+    @ManyToOne
+    @JoinColumn(name = "daniilId")
+    private MatchPerson daniil;
 
     public MatchCombined() {
     }
 
-    public MatchCombined(Integer extId, LocalDateTime matchDate, Integer pk, Integer pd, Double pkd, Integer dk, Integer dd, Double dkd) {
+    public MatchCombined(Integer extId, LocalDateTime matchDate) {
         this.extId = extId;
         this.matchDate = matchDate;
-        this.pk = pk;
-        this.pd = pd;
-        this.pkd = pkd;
-        this.dk = dk;
-        this.dd = dd;
-        this.dkd = dkd;
+    }
+
+    public MatchCombined(Integer extId, LocalDateTime matchDate, MatchPerson pasha, MatchPerson daniil) {
+        this.extId = extId;
+        this.matchDate = matchDate;
+        this.pasha = pasha;
+        this.daniil = daniil;
     }
 
     public Long getId() {
@@ -74,51 +65,45 @@ public class MatchCombined implements Serializable {
         this.matchDate = matchDate;
     }
 
-    public Integer getPk() {
-        return pk;
+    public MatchPerson getDaniil() {
+        return daniil;
     }
 
-    public void setPk(Integer pk) {
-        this.pk = pk;
+    public void setDaniil(MatchPerson daniil) {
+        this.daniil = daniil;
     }
 
-    public Integer getPd() {
-        return pd;
+    public MatchPerson getPasha() {
+
+        return pasha;
     }
 
-    public void setPd(Integer pd) {
-        this.pd = pd;
+    public void setPasha(MatchPerson pasha) {
+        this.pasha = pasha;
     }
 
-    public Double getPkd() {
-        return pkd;
+    public MatchPerson getPlayer(Player player) {
+        MatchPerson matchPerson = null;
+        switch (player) {
+            case Pasha:
+                matchPerson = getPasha();
+                break;
+            case Daniil:
+                matchPerson = getDaniil();
+                break;
+        }
+        return matchPerson;
     }
 
-    public void setPkd(Double pkd) {
-        this.pkd = pkd;
-    }
-
-    public Integer getDk() {
-        return dk;
-    }
-
-    public void setDk(Integer dk) {
-        this.dk = dk;
-    }
-
-    public Integer getDd() {
-        return dd;
-    }
-
-    public void setDd(Integer dd) {
-        this.dd = dd;
-    }
-
-    public Double getDkd() {
-        return dkd;
-    }
-
-    public void setDkd(Double dkd) {
-        this.dkd = dkd;
+    public MatchPerson setPlayer(Player player, MatchPerson matchPerson) {
+        switch (player) {
+            case Pasha:
+                setPasha(matchPerson);
+                break;
+            case Daniil:
+                setDaniil(matchPerson);
+                break;
+        }
+        return matchPerson;
     }
 }
