@@ -114,7 +114,10 @@ public class MainController {
         ExtStats extStats = new Downloader<>(ExtStats.class).downloadUrl(player);
         int i = 0;
         for (ExtMatchStat stat : extStats.getData()) {
-            MatchCombined matchCombined = new MatchCombined(stat.getMatch().getId(), dateService.jodaDateToLocalDate(stat.getDate()));
+            MatchCombined matchCombined = matchCombinedService.findByExtId(stat.getMatch().getId());
+            if (matchCombined == null) {
+                matchCombined = new MatchCombined(stat.getMatch().getId(), dateService.jodaDateToLocalDate(stat.getDate()));
+            }
             matchCombined.setPlayer(player, matchPersonService.save(new MatchPerson(stat.getKills(), stat.getDies(), stat.getKd())));
             matchCombinedService.save(matchCombined);
             data.add(matchCombined);
