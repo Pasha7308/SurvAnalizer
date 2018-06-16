@@ -60,6 +60,7 @@ public class MainController {
 
         TableColumn<MatchCombined, String> colId = new TableColumn<>("extId");
         colId.setCellValueFactory(new PropertyValueFactory<>("extId"));
+        colId.setStyle( "-fx-alignment: CENTER;");
 
         TableColumn<MatchCombined, Integer> colPK = new TableColumn<>("pK");
         colPK.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKills() : null));
