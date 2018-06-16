@@ -1,14 +1,11 @@
 package com.pasha.service;
 
 import com.pasha.entity.MatchCombined;
-import com.pasha.entity.MatchPerson;
 import com.pasha.repository.MatchCombinedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -47,6 +44,9 @@ public class MatchCombinedService {
         return repository.findAll();
     }
 
+    public List<MatchCombined> findAllByOrderByExtIdDesc() {
+        return repository.findAllByOrderByExtIdDesc();
+    }
     public MatchCombined findByExtId(Integer extId) {
         return repository.findByExtId(extId);
     }

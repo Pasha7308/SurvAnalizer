@@ -100,10 +100,15 @@ public class MainController {
             data.clear();
             matchCombinedService.deleteAll();
 
-            downloadPlayer(Player.Pasha);
-            downloadPlayer(Player.Daniil);
+            int count = countPlayer(Player.Pasha);
+            Platform.runLater(() -> progressBar.setProgress(0.5));
+            count += countPlayer(Player.Daniil);
+            Platform.runLater(() -> progressBar.setProgress(1));
 
-            List<MatchCombined> matches = matchCombinedService.findAll();
+            int skip = downloadPlayer(Player.Pasha, 0, count);
+            downloadPlayer(Player.Daniil, skip, count);
+
+            List<MatchCombined> matches = matchCombinedService.findAllByOrderByExtIdDesc();
             data = FXCollections.observableArrayList(matches);
             table.setItems(data);
 
@@ -122,25 +127,33 @@ public class MainController {
         table.setItems(data);
     }
 
-    private void downloadPlayer(Player player) {
+    private int countPlayer(Player player) {
+        ExtStats extStats = new Downloader<>(ExtStats.class).downloadUrl(player, 1, 0);
+        return extStats != null ? extStats.getTotal() : 0;
+    }
+    private int downloadPlayer(Player player, int skip, int total) {
         if (stopped) {
-            return;
+            return 0;
         }
-        ExtStats extStats = new Downloader<>(ExtStats.class).downloadUrl(player);
-        int i = 0;
-        for (ExtMatchStat stat : extStats.getData()) {
-            MatchCombined matchCombined = matchCombinedService.findByExtId(stat.getMatch().getId());
-            if (matchCombined == null) {
-                matchCombined = new MatchCombined(stat.getMatch().getId(), dateService.jodaDateToLocalDate(stat.getDate()));
+        Platform.runLater(() -> progressBar.setProgress((double)skip / (double)total));
+        int i = 0, localTotal = 100;
+        for (; i < localTotal; i += 50) {
+            ExtStats extStats = new Downloader<>(ExtStats.class).downloadUrl(player, 50, i);
+            localTotal = extStats.getTotal();
+            for (ExtMatchStat stat : extStats.getData()) {
+                MatchCombined matchCombined = matchCombinedService.findByExtId(stat.getMatch().getId());
+                if (matchCombined == null) {
+                    matchCombined = new MatchCombined(stat.getMatch().getId(), dateService.jodaDateToLocalDate(stat.getDate()));
+                }
+                matchCombined.setPlayer(player, matchPersonService.save(new MatchPerson(stat.getKills(), stat.getDies(), stat.getKd())));
+                matchCombinedService.save(matchCombined);
             }
-            matchCombined.setPlayer(player, matchPersonService.save(new MatchPerson(stat.getKills(), stat.getDies(), stat.getKd())));
-            matchCombinedService.save(matchCombined);
-
-            double progress = i++ / extStats.getData().size();
+            double progress = (double)(skip + i + 50) / (double)total;
             Platform.runLater(() -> progressBar.setProgress(progress));
             if (stopped) {
                 break;
             }
         }
+        return i;
     }
 }

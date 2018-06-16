@@ -11,5 +11,6 @@ import java.util.List;
 public interface MatchCombinedRepository extends CrudRepository<MatchCombined, Long> {
 
     List<MatchCombined> findAll();
+    List<MatchCombined> findAllByOrderByExtIdDesc();
     MatchCombined findByExtId(Integer extId);
 }
