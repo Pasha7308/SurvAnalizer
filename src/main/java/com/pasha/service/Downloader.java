@@ -8,6 +8,7 @@ import com.pasha.entity.Player;
 import java.net.URL;
 
 public class Downloader<T> {
+    // https://survarium.pro/api/v2/players/pasha7308/stats?lang=english&limit=15&skip=0
     static private final String URLPASHA = "https://survarium.pro/api/v2/players/pasha7308/stats";
     static private final String URLALKARIZ = "https://survarium.pro/api/v2/players/Alkariz/stats";
 
