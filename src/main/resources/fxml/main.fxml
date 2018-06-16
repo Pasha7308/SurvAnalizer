@@ -17,6 +17,7 @@
       <HBox alignment="CENTER" layoutX="21.0" layoutY="207.0" prefHeight="50.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <children>
             <Button fx:id="downloadButton" minWidth="100" mnemonicParsing="false" onAction="#download" text="Скачать" />
+            <Button fx:id="analyzeButton" minWidth="100" mnemonicParsing="false" onAction="#analyze" text="Анализ" />
             <ProgressBar fx:id="progressBar" prefWidth="1000" progress="0.0" HBox.hgrow="ALWAYS">
                <padding>
                   <Insets left="10.0" right="10.0" />

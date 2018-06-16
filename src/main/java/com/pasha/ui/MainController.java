@@ -5,10 +5,7 @@ import com.pasha.entity.MatchPerson;
 import com.pasha.entity.Player;
 import com.pasha.entity.external.stats.ExtMatchStat;
 import com.pasha.entity.external.stats.ExtStats;
-import com.pasha.service.DateService;
-import com.pasha.service.Downloader;
-import com.pasha.service.MatchCombinedService;
-import com.pasha.service.MatchPersonService;
+import com.pasha.service.*;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -33,6 +30,8 @@ public class MainController {
     @Autowired private MatchCombinedService matchCombinedService;
     @Autowired private MatchPersonService matchPersonService;
     @Autowired private DateService dateService;
+    @Autowired private Analyzer analyzer;
+
 
     // Инъекции JavaFX
     @FXML private TableView<MatchCombined> table;
@@ -57,6 +56,7 @@ public class MainController {
         // Столбцы таблицы
         TableColumn<MatchCombined, String> colDate = new TableColumn<>("Date/Time");
         colDate.setCellValueFactory(new PropertyValueFactory<>("matchDate"));
+        //colDate.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getMatchType() == MatchType.realData) ? p.getValue().getMatchDate() : p.getValue().getMatchDate()));
 
         TableColumn<MatchCombined, String> colId = new TableColumn<>("extId");
         colId.setCellValueFactory(new PropertyValueFactory<>("extId"));
@@ -111,6 +111,15 @@ public class MainController {
             Platform.runLater(() -> downloadButton.setText("Скачать"));
             stopped = false;
         }).start();
+    }
+
+    @FXML
+    public void analyze() {
+        analyzer.analyze();
+        data.clear();
+        List<MatchCombined> matches = matchCombinedService.findAll();
+        data = FXCollections.observableArrayList(matches);
+        table.setItems(data);
     }
 
     private void downloadPlayer(Player player) {

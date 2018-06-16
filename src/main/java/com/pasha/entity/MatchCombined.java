@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import static com.pasha.entity.MatchType.realData;
+
 @Entity
 @Table
 public class MatchCombined implements Serializable {
@@ -25,6 +27,9 @@ public class MatchCombined implements Serializable {
     @ManyToOne
     @JoinColumn(name = "daniilId")
     private MatchPerson daniil;
+
+    @Column(nullable = false)
+    private MatchType matchType = realData;
 
     public MatchCombined() {
     }
@@ -76,6 +81,14 @@ public class MatchCombined implements Serializable {
     public MatchPerson getPasha() {
 
         return pasha;
+    }
+
+    public MatchType getMatchType() {
+        return matchType;
+    }
+
+    public void setMatchType(MatchType matchType) {
+        this.matchType = matchType;
     }
 
     public void setPasha(MatchPerson pasha) {
