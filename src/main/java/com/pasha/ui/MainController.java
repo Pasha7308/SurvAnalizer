@@ -87,6 +87,7 @@ public class MainController {
 
         // Данные таблицы
         table.setItems(data);
+        download();
     }
 
     @FXML

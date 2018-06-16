@@ -24,7 +24,7 @@ public class MatchCombinedService {
         this.matchPersonService = matchPersonService;
     }
 
-    @PostConstruct
+    /*@PostConstruct
     public void generateTestData() {
         MatchCombined matchCombined = save(new MatchCombined(1, LocalDateTime.of(2018, 1, 1, 12, 0),
                 matchPersonService.save(new MatchPerson((int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0)),
@@ -33,7 +33,7 @@ public class MatchCombinedService {
         matchCombined = save(new MatchCombined(2, LocalDateTime.of(2018, 1, 1, 12, 0),
                 matchPersonService.save(new MatchPerson((int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0)),
                 matchPersonService.save(new MatchPerson((int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0))));
-    }
+    }*/
 
     public MatchCombined save(MatchCombined matchCombined) {
         return repository.save(matchCombined);
