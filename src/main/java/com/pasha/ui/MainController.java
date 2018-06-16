@@ -1,12 +1,15 @@
 package com.pasha.ui;
 
 import com.pasha.entity.MatchCombined;
-import com.pasha.entity.MatchPerson;
-import com.pasha.entity.MatchType;
 import com.pasha.entity.Player;
 import com.pasha.entity.external.stats.ExtMatchStat;
 import com.pasha.entity.external.stats.ExtStats;
-import com.pasha.service.*;
+import com.pasha.service.Analyzer;
+import com.pasha.service.Downloader;
+import com.pasha.service.MatchCombinedService;
+import com.pasha.service.MatchPersonService;
+import com.pasha.translator.MatchPersonTranslator;
+import com.pasha.translator.MatchTranslator;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -30,9 +33,9 @@ public class MainController {
     // Инъекции Spring
     @Autowired private MatchCombinedService matchCombinedService;
     @Autowired private MatchPersonService matchPersonService;
-    @Autowired private DateService dateService;
+    @Autowired private MatchTranslator matchTranslator;
+    @Autowired private MatchPersonTranslator matchPersonTranslator;
     @Autowired private Analyzer analyzer;
-
 
     // Инъекции JavaFX
     @FXML private TableView<MatchCombined> table;
@@ -146,9 +149,9 @@ public class MainController {
             for (ExtMatchStat stat : extStats.getData()) {
                 MatchCombined matchCombined = matchCombinedService.findByExtId(stat.getMatch().getId());
                 if (matchCombined == null) {
-                    matchCombined = new MatchCombined(stat.getMatch().getId(), dateService.jodaDateToLocalDate(stat.getDate()));
+                    matchCombined = matchTranslator.extToLocal(stat);
                 }
-                matchCombined.setPlayer(player, matchPersonService.save(new MatchPerson(stat.getKills(), stat.getDies(), stat.getKd())));
+                matchCombined.setPlayer(player, matchPersonService.save(matchPersonTranslator.extToLocal(stat)));
                 matchCombinedService.save(matchCombined);
             }
             double progress = (double)(skip + i + 50) / (double)total;
