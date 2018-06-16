@@ -61,6 +61,7 @@ public class MainController {
         // Столбцы таблицы
         TableColumn<MatchCombined, String> colDate = new TableColumn<>("Date/Time");
         colDate.setCellValueFactory(new PropertyValueFactory<>("header"));
+        colDate.setMinWidth(30);
 
         TableColumn<MatchCombined, String> colId = new TableColumn<>("extId");
         colId.setCellValueFactory(new PropertyValueFactory<>("extId"));
