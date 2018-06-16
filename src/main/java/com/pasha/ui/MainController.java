@@ -64,12 +64,15 @@ public class MainController {
 
         TableColumn<MatchCombined, Integer> colPK = new TableColumn<>("pK");
         colPK.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKills() : null));
+        colPK.setStyle( "-fx-alignment: CENTER-RIGHT;");
 
         TableColumn<MatchCombined, Integer> colPD = new TableColumn<>("pD");
         colPD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getDeaths() : null));
+        colPD.setStyle( "-fx-alignment: CENTER-RIGHT;");
 
         TableColumn<MatchCombined, Double> colPKD = new TableColumn<>("pKD");
         colPKD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKd() : null));
+        colPKD.setStyle( "-fx-alignment: CENTER-RIGHT;");
 
         TableColumn<MatchCombined, Integer> colDK = new TableColumn<>("dK");
         colDK.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getKills() : null));
@@ -101,6 +104,7 @@ public class MainController {
 
             List<MatchCombined> matches = matchCombinedService.findAll();
             data = FXCollections.observableArrayList(matches);
+            table.setItems(data);
 
             downloadButton.setOnAction(action);
             Platform.runLater(() -> downloadButton.setText("Скачать"));
@@ -121,7 +125,6 @@ public class MainController {
             }
             matchCombined.setPlayer(player, matchPersonService.save(new MatchPerson(stat.getKills(), stat.getDies(), stat.getKd())));
             matchCombinedService.save(matchCombined);
-            data.add(matchCombined);
 
             double progress = i++ / extStats.getData().size();
             Platform.runLater(() -> progressBar.setProgress(progress));
