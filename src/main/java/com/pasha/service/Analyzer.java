@@ -42,14 +42,20 @@ public class Analyzer {
 
         MatchCombined matchCombined = new MatchCombined(99999998, LocalDateTime.now());
         matchCombined.setMatchType(MatchType.analyticsSolo);
-        matchCombined.setPasha(matchPersonService.save(new MatchPerson(pasha.getKills(true), pasha.getDeaths(true), pasha.getKDs(true))));
-        matchCombined.setDaniil(matchPersonService.save(new MatchPerson(daniil.getKills(true), daniil.getDeaths(true), daniil.getKDs(true))));
+        matchCombined.setAnalysisHeader(String.format("%d/%d", pasha.getMatchCount(true), daniil.getMatchCount(true)));
+        matchCombined.setPasha(matchPersonService.save(
+                new MatchPerson(pasha.getKills(true), pasha.getDeaths(true), pasha.getKDs(true))));
+        matchCombined.setDaniil(matchPersonService.save(
+                new MatchPerson(daniil.getKills(true), daniil.getDeaths(true), daniil.getKDs(true))));
         matchCombinedService.save(matchCombined);
 
         matchCombined = new MatchCombined(99999999, LocalDateTime.now());
         matchCombined.setMatchType(MatchType.analyticsGroup);
-        matchCombined.setPasha(matchPersonService.save(new MatchPerson(pasha.getKills(false), pasha.getDeaths(false), pasha.getKDs(false))));
-        matchCombined.setDaniil(matchPersonService.save(new MatchPerson(daniil.getKills(false), daniil.getDeaths(false), daniil.getKDs(false))));
+        matchCombined.setAnalysisHeader(String.format("%d/%d", pasha.getMatchCount(false), daniil.getMatchCount(false)));
+        matchCombined.setPasha(matchPersonService.save(
+                new MatchPerson(pasha.getKills(false), pasha.getDeaths(false), pasha.getKDs(false))));
+        matchCombined.setDaniil(matchPersonService.save(
+                new MatchPerson(daniil.getKills(false), daniil.getDeaths(false), daniil.getKDs(false))));
         matchCombinedService.save(matchCombined);
     }
 }

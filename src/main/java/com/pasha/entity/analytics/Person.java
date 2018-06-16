@@ -33,6 +33,10 @@ public class Person {
         return isSolo ? solo.getAverageKDs() : group.getAverageKDs();
     }
 
+    public int getMatchCount(boolean isSolo) {
+        return isSolo ? solo.getMatchCount() : group.getMatchCount();
+    }
+
     public void divide()
     {
         solo.divide();

@@ -19,6 +19,10 @@ public class MatchCombined implements Serializable {
     private Integer extId;
 
     @Column(nullable = false)
+    private MatchType matchType = realData;
+
+    // real match properties
+    @Column(nullable = false)
     private LocalDateTime matchDate;
 
     @ManyToOne
@@ -29,8 +33,8 @@ public class MatchCombined implements Serializable {
     @JoinColumn(name = "daniilId")
     private MatchPerson daniil;
 
-    @Column(nullable = false)
-    private MatchType matchType = realData;
+    // analysis properties
+    private String analysisHeader;
 
     public MatchCombined() {
     }
@@ -96,6 +100,14 @@ public class MatchCombined implements Serializable {
         this.pasha = pasha;
     }
 
+    public String getAnalysisHeader() {
+        return analysisHeader;
+    }
+
+    public void setAnalysisHeader(String analysisHeader) {
+        this.analysisHeader = analysisHeader;
+    }
+
     public MatchPerson getPlayer(Player player) {
         MatchPerson matchPerson = null;
         switch (player) {
@@ -128,10 +140,10 @@ public class MatchCombined implements Serializable {
                 ret = getMatchDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
                 break;
             case analyticsSolo:
-                ret = "Соло";
+                ret = String.format("Соло (%s)", analysisHeader);
                 break;
             case analyticsGroup:
-                ret = "Группа";
+                ret = String.format("Группа (%s)", analysisHeader);
                 break;
         }
         return ret;
