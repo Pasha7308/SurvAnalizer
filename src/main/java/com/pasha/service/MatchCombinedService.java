@@ -11,26 +11,7 @@ import java.util.List;
 @Service
 @Transactional
 public class MatchCombinedService {
-
-    private MatchCombinedRepository repository;
-    private MatchPersonService matchPersonService;
-
-    @Autowired
-    public MatchCombinedService(MatchCombinedRepository repository, MatchPersonService matchPersonService) {
-        this.repository = repository;
-        this.matchPersonService = matchPersonService;
-    }
-
-    /*@PostConstruct
-    public void generateTestData() {
-        MatchCombined matchCombined = save(new MatchCombined(1, LocalDateTime.of(2018, 1, 1, 12, 0),
-                matchPersonService.save(new MatchPerson((int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0)),
-                matchPersonService.save(new MatchPerson((int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0))));
-
-        matchCombined = save(new MatchCombined(2, LocalDateTime.of(2018, 1, 1, 12, 0),
-                matchPersonService.save(new MatchPerson((int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0)),
-                matchPersonService.save(new MatchPerson((int)Math.round(Math.random()*100), (int)Math.round(Math.random()*100), Math.random()*2.0))));
-    }*/
+    @Autowired private MatchCombinedRepository repository;
 
     public MatchCombined save(MatchCombined matchCombined) {
         return repository.save(matchCombined);
@@ -47,6 +28,7 @@ public class MatchCombinedService {
     public List<MatchCombined> findAllByOrderByExtIdDesc() {
         return repository.findAllByOrderByExtIdDesc();
     }
+
     public MatchCombined findByExtId(Integer extId) {
         return repository.findByExtId(extId);
     }
