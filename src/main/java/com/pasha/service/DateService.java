@@ -12,6 +12,6 @@ public class DateService {
                 dateTime.getMonthOfYear(),
                 dateTime.getDayOfMonth(),
                 dateTime.getHourOfDay(),
-                dateTime.getMinuteOfHour());
+                dateTime.getMinuteOfHour()).plusHours(7);
     }
 }

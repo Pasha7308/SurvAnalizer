@@ -3,6 +3,7 @@ package com.pasha.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static com.pasha.entity.MatchType.realData;
 
@@ -118,5 +119,21 @@ public class MatchCombined implements Serializable {
                 break;
         }
         return matchPerson;
+    }
+
+    public String getHeader() {
+        String ret = "";
+        switch (matchType) {
+            case realData:
+                ret = getMatchDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                break;
+            case analyticsSolo:
+                ret = "Соло";
+                break;
+            case analyticsGroup:
+                ret = "Группа";
+                break;
+        }
+        return ret;
     }
 }

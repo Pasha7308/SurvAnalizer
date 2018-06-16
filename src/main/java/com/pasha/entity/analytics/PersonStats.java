@@ -49,6 +49,6 @@ public class PersonStats {
     public void divide() {
         averageKills = averageKills / matchCount;
         averageDeaths = averageDeaths / matchCount;
-        averageKDs = averageKills / averageDeaths;
+        averageKDs = (int)((averageKills / averageDeaths) * 1000) / 1000.0;
     }
 }

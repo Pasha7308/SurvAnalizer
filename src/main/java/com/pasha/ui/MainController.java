@@ -2,6 +2,7 @@ package com.pasha.ui;
 
 import com.pasha.entity.MatchCombined;
 import com.pasha.entity.MatchPerson;
+import com.pasha.entity.MatchType;
 import com.pasha.entity.Player;
 import com.pasha.entity.external.stats.ExtMatchStat;
 import com.pasha.entity.external.stats.ExtStats;
@@ -36,6 +37,7 @@ public class MainController {
     // Инъекции JavaFX
     @FXML private TableView<MatchCombined> table;
     @FXML private Button downloadButton;
+    @FXML private Button analyzeButton;
     @FXML private ProgressBar progressBar;
 
     // Variables
@@ -55,8 +57,7 @@ public class MainController {
 
         // Столбцы таблицы
         TableColumn<MatchCombined, String> colDate = new TableColumn<>("Date/Time");
-        colDate.setCellValueFactory(new PropertyValueFactory<>("matchDate"));
-        //colDate.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getMatchType() == MatchType.realData) ? p.getValue().getMatchDate() : p.getValue().getMatchDate()));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("header"));
 
         TableColumn<MatchCombined, String> colId = new TableColumn<>("extId");
         colId.setCellValueFactory(new PropertyValueFactory<>("extId"));
@@ -95,6 +96,7 @@ public class MainController {
         EventHandler<ActionEvent> action = downloadButton.getOnAction();
         downloadButton.setText("Стоп");
         new Thread(() -> {
+            analyzeButton.setDisable(true);
             downloadButton.setOnAction((ActionEvent) -> { stopped = true; });
             Platform.runLater(() -> progressBar.setProgress(0));
             data.clear();
@@ -113,6 +115,7 @@ public class MainController {
             table.setItems(data);
 
             downloadButton.setOnAction(action);
+            analyzeButton.setDisable(false);
             Platform.runLater(() -> downloadButton.setText("Скачать"));
             stopped = false;
         }).start();
@@ -122,7 +125,7 @@ public class MainController {
     public void analyze() {
         analyzer.analyze();
         data.clear();
-        List<MatchCombined> matches = matchCombinedService.findAll();
+        List<MatchCombined> matches = matchCombinedService.findAllByOrderByExtIdDesc();
         data = FXCollections.observableArrayList(matches);
         table.setItems(data);
     }
