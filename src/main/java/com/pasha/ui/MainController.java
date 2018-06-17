@@ -2,6 +2,9 @@ package com.pasha.ui;
 
 import com.pasha.entity.MatchCombined;
 import com.pasha.entity.Player;
+import com.pasha.entity.analytics.ShowClass;
+import com.pasha.entity.analytics.ShowClassDesc;
+import com.pasha.entity.analytics.ShowFieldDesc;
 import com.pasha.entity.external.stats.ExtMatchStat;
 import com.pasha.entity.external.stats.ExtStats;
 import com.pasha.service.Analyzer;
@@ -22,9 +25,11 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("SpringJavaAutowiringInspection")
@@ -39,12 +44,14 @@ public class MainController {
 
     // Инъекции JavaFX
     @FXML private TableView<MatchCombined> table;
+    @FXML private TableView<ShowClass> tableAnalytics;
     @FXML private Button downloadButton;
     @FXML private Button analyzeButton;
     @FXML private ProgressBar progressBar;
 
     // Variables
     private ObservableList<MatchCombined> data;
+    private ObservableList<ShowClass> dataAnalytics;
     private boolean stopped = false;
 
     @FXML
@@ -52,32 +59,41 @@ public class MainController {
         // Этап инициализации JavaFX
     }
 
-    @SuppressWarnings("unchecked")
     @PostConstruct
     public void init() {
+        initTable();
+
+        initAnalytics();
+
+        // Данные таблицы
+        download();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initTable() {
         List<MatchCombined> contacts = matchCombinedService.findAll();
         data = FXCollections.observableArrayList(contacts);
 
         // Столбцы таблицы
         TableColumn<MatchCombined, String> colDate = new TableColumn<>("Date/Time");
-        colDate.setCellValueFactory(new PropertyValueFactory<>("header"));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colDate.setMinWidth(30);
 
         TableColumn<MatchCombined, String> colId = new TableColumn<>("extId");
         colId.setCellValueFactory(new PropertyValueFactory<>("extId"));
-        colId.setStyle( "-fx-alignment: CENTER;");
+        colId.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<MatchCombined, Integer> colPK = new TableColumn<>("pK");
         colPK.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKills() : null));
-        colPK.setStyle( "-fx-alignment: CENTER-RIGHT;");
+        colPK.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         TableColumn<MatchCombined, Integer> colPD = new TableColumn<>("pD");
         colPD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getDeaths() : null));
-        colPD.setStyle( "-fx-alignment: CENTER-RIGHT;");
+        colPD.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         TableColumn<MatchCombined, Double> colPKD = new TableColumn<>("pKD");
         colPKD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKd() : null));
-        colPKD.setStyle( "-fx-alignment: CENTER-RIGHT;");
+        colPKD.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         TableColumn<MatchCombined, Integer> colDK = new TableColumn<>("dK");
         colDK.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getKills() : null));
@@ -89,10 +105,36 @@ public class MainController {
         colDKD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getKd() : null));
 
         table.getColumns().setAll(colDate, colPK, colPD, colPKD, colId, colDK, colDD, colDKD);
-
-        // Данные таблицы
         table.setItems(data);
-        download();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initAnalytics() {
+        List<ShowClass> show = new ArrayList<>();
+        dataAnalytics = FXCollections.observableArrayList(show);
+        tableAnalytics.setItems(dataAnalytics);
+
+        ShowClassDesc description = new ShowClassDesc();
+        Analyzer.initTable(description);
+
+        for (ShowFieldDesc field : description.getFields()) {
+            TableColumn<ShowClass, String> col = new TableColumn<>(field.getTitle());
+            col.setCellValueFactory(new PropertyValueFactory<>(field.getField()));
+            col.setMinWidth(field.getWidth());
+            col.setStyle("-fx-alignment: CENTER;");
+            tableAnalytics.getColumns().add(col);
+        }
+        tableAnalytics.setItems(dataAnalytics);
+    }
+
+    @FXML
+    public void analyze() {
+        List<ShowClass> show = new ArrayList<>();
+        analyzer.analyze(show);
+
+        dataAnalytics.clear();
+        dataAnalytics = FXCollections.observableArrayList(show);
+        tableAnalytics.setItems(dataAnalytics);
     }
 
     @FXML
@@ -123,15 +165,6 @@ public class MainController {
             Platform.runLater(() -> downloadButton.setText("Скачать"));
             stopped = false;
         }).start();
-    }
-
-    @FXML
-    public void analyze() {
-        analyzer.analyze();
-        data.clear();
-        List<MatchCombined> matches = matchCombinedService.findAllByOrderByExtIdDesc();
-        data = FXCollections.observableArrayList(matches);
-        table.setItems(data);
     }
 
     private int countPlayer(Player player) {

@@ -19,10 +19,6 @@ public class MatchCombined implements Serializable {
     private Integer extId;
 
     @Column(nullable = false)
-    private MatchType matchType = realData;
-
-    // real match properties
-    @Column(nullable = false)
     private LocalDateTime matchDate;
 
     @ManyToOne
@@ -32,9 +28,6 @@ public class MatchCombined implements Serializable {
     @ManyToOne
     @JoinColumn(name = "daniilId")
     private MatchPerson daniil;
-
-    // analysis properties
-    private String analysisHeader;
 
     public MatchCombined() {
     }
@@ -84,28 +77,11 @@ public class MatchCombined implements Serializable {
     }
 
     public MatchPerson getPasha() {
-
         return pasha;
-    }
-
-    public MatchType getMatchType() {
-        return matchType;
-    }
-
-    public void setMatchType(MatchType matchType) {
-        this.matchType = matchType;
     }
 
     public void setPasha(MatchPerson pasha) {
         this.pasha = pasha;
-    }
-
-    public String getAnalysisHeader() {
-        return analysisHeader;
-    }
-
-    public void setAnalysisHeader(String analysisHeader) {
-        this.analysisHeader = analysisHeader;
     }
 
     public MatchPerson getPlayer(Player player) {
@@ -133,19 +109,7 @@ public class MatchCombined implements Serializable {
         return matchPerson;
     }
 
-    public String getHeader() {
-        String ret = "";
-        switch (matchType) {
-            case realData:
-                ret = getMatchDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                break;
-            case analyticsSolo:
-                ret = String.format("Соло (%s)", analysisHeader);
-                break;
-            case analyticsGroup:
-                ret = String.format("Группа (%s)", analysisHeader);
-                break;
-        }
-        return ret;
+    public String getDate() {
+        return getMatchDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 }

@@ -9,11 +9,20 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pasha.ui.MainController">
    <children>
-      <TableView fx:id="table" editable="true" prefHeight="200.0" prefWidth="800.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TableView fx:id="table" editable="true" prefHeight="200.0" prefWidth="800.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
+      <HBox alignment="CENTER" layoutX="21.0" layoutY="207.0" prefHeight="50.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="400.0">
+         <children>
+            <TableView fx:id="tableAnalytics" editable="true" minHeight="-Infinity" prefHeight="150.0" prefWidth="800.0" tableMenuButtonVisible="true" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets bottom="50.0" />
+               </HBox.margin>
+            </TableView>
+         </children>
+      </HBox>
       <HBox alignment="CENTER" layoutX="21.0" layoutY="207.0" prefHeight="50.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <children>
             <Button fx:id="downloadButton" minWidth="100" mnemonicParsing="false" onAction="#download" text="Скачать" />

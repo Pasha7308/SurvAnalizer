@@ -21,16 +21,16 @@ public class Person {
         this.group = group;
     }
 
-    public int getKills(boolean isSolo) {
-        return isSolo ? (int)Math.round(solo.getAverageKills()) : (int)Math.round(group.getAverageKills());
+    public String getKills(boolean isSolo) {
+        return String.format("%.2f", isSolo ? solo.getAverageKills() : group.getAverageKills());
     }
 
-    public int getDeaths(boolean isSolo) {
-        return isSolo ? (int)Math.round(solo.getAverageDeaths()) : (int)Math.round(group.getAverageDeaths());
+    public String getDeaths(boolean isSolo) {
+        return String.format("%.2f", isSolo ? solo.getAverageDeaths() : group.getAverageDeaths());
     }
 
-    public double getKDs(boolean isSolo) {
-        return isSolo ? solo.getAverageKDs() : group.getAverageKDs();
+    public String getKDs(boolean isSolo) {
+        return String.format("%.2f", isSolo ? solo.getAverageKDs() : group.getAverageKDs());
     }
 
     public int getMatchCount(boolean isSolo) {

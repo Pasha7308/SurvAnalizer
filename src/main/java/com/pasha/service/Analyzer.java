@@ -4,6 +4,8 @@ import com.pasha.entity.MatchCombined;
 import com.pasha.entity.MatchPerson;
 import com.pasha.entity.MatchType;
 import com.pasha.entity.analytics.Person;
+import com.pasha.entity.analytics.ShowClass;
+import com.pasha.entity.analytics.ShowClassDesc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,20 @@ import java.util.List;
 public class Analyzer {
 
     @Autowired private MatchCombinedService matchCombinedService;
-    @Autowired private MatchPersonService matchPersonService;
 
+    static public void initTable(ShowClassDesc showClassDesc) {
+        showClassDesc.add("Описание", "description", 100);
+        showClassDesc.add("pMatches", "pmatch", 20);
+        showClassDesc.add("pK", "pk", 20);
+        showClassDesc.add("pD", "pd", 20);
+        showClassDesc.add("pKD", "pkd", 20);
+        showClassDesc.add("dMatches", "dmatch", 20);
+        showClassDesc.add("dK", "dk", 20);
+        showClassDesc.add("dD", "dd", 20);
+        showClassDesc.add("dKD", "dkd", 20);
+    }
 
-    public void analyze() {
+    public void analyze(List<ShowClass> show) {
         List<MatchCombined> matches = matchCombinedService.findAll();
 
         Person pasha = new Person();
@@ -40,22 +52,17 @@ public class Analyzer {
         pasha.divide();
         daniil.divide();
 
-        MatchCombined matchCombined = new MatchCombined(99999998, LocalDateTime.now());
-        matchCombined.setMatchType(MatchType.analyticsSolo);
-        matchCombined.setAnalysisHeader(String.format("%d/%d", pasha.getMatchCount(true), daniil.getMatchCount(true)));
-        matchCombined.setPasha(matchPersonService.save(
-                new MatchPerson(pasha.getKills(true), pasha.getDeaths(true), pasha.getKDs(true))));
-        matchCombined.setDaniil(matchPersonService.save(
-                new MatchPerson(daniil.getKills(true), daniil.getDeaths(true), daniil.getKDs(true))));
-        matchCombinedService.save(matchCombined);
+        show.add(new ShowClass("Соло",
+                String.valueOf(pasha.getMatchCount(true)),
+                pasha.getKills(true), pasha.getDeaths(true), pasha.getKDs(true),
+                String.valueOf(daniil.getMatchCount(true)),
+                daniil.getKills(true), daniil.getDeaths(true), daniil.getKDs(true)));
 
-        matchCombined = new MatchCombined(99999999, LocalDateTime.now());
-        matchCombined.setMatchType(MatchType.analyticsGroup);
-        matchCombined.setAnalysisHeader(String.format("%d/%d", pasha.getMatchCount(false), daniil.getMatchCount(false)));
-        matchCombined.setPasha(matchPersonService.save(
-                new MatchPerson(pasha.getKills(false), pasha.getDeaths(false), pasha.getKDs(false))));
-        matchCombined.setDaniil(matchPersonService.save(
-                new MatchPerson(daniil.getKills(false), daniil.getDeaths(false), daniil.getKDs(false))));
-        matchCombinedService.save(matchCombined);
+        show.add(new ShowClass("Группа",
+                String.valueOf(pasha.getMatchCount(false)),
+                pasha.getKills(false), pasha.getDeaths(false), pasha.getKDs(false),
+                String.valueOf(daniil.getMatchCount(false)),
+                daniil.getKills(false), daniil.getDeaths(false), daniil.getKDs(false)));
+
     }
 }
