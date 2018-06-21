@@ -11,22 +11,46 @@ public class MatchPerson implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = true)
+    @Column
     private Integer kills;
 
-    @Column(nullable = true)
+    @Column
     private Integer deaths;
 
-    @Column(nullable = true)
+    @Column
     private Double kd;
 
-    public MatchPerson() {
-    }
+    @Column
+    private Integer artefactUses;
 
-    public MatchPerson(Integer kills, Integer deaths, Double kd) {
-        this.kills = kills;
-        this.deaths = deaths;
-        this.kd = kd;
+    @Column
+    private Integer boxesBringed;
+
+    @Column
+    private Integer pointCaptures;
+
+    @Column
+    private Integer artefactKills;
+
+    @Column
+    private Integer meleeKills;
+
+    @Column
+    private Integer grenadeKills;
+
+    @Column
+    private Integer headshots;
+
+    @Column
+    private Integer score;
+
+    @Column
+    private Integer place;
+
+    @Column
+    private Integer level;
+
+    public MatchPerson() {
     }
 
     public Long getId() {
@@ -59,5 +83,85 @@ public class MatchPerson implements Serializable {
 
     public void setKd(Double kd) {
         this.kd = kd;
+    }
+
+    public Integer getArtefactUses() {
+        return artefactUses;
+    }
+
+    public void setArtefactUses(Integer artefactUses) {
+        this.artefactUses = artefactUses;
+    }
+
+    public Integer getBoxesBringed() {
+        return boxesBringed;
+    }
+
+    public void setBoxesBringed(Integer boxesBringed) {
+        this.boxesBringed = boxesBringed;
+    }
+
+    public Integer getPointCaptures() {
+        return pointCaptures;
+    }
+
+    public void setPointCaptures(Integer pointCaptures) {
+        this.pointCaptures = pointCaptures;
+    }
+
+    public Integer getArtefactKills() {
+        return artefactKills;
+    }
+
+    public void setArtefactKills(Integer artefactKills) {
+        this.artefactKills = artefactKills;
+    }
+
+    public Integer getMeleeKills() {
+        return meleeKills;
+    }
+
+    public void setMeleeKills(Integer meleeKills) {
+        this.meleeKills = meleeKills;
+    }
+
+    public Integer getGrenadeKills() {
+        return grenadeKills;
+    }
+
+    public void setGrenadeKills(Integer grenadeKills) {
+        this.grenadeKills = grenadeKills;
+    }
+
+    public Integer getHeadshots() {
+        return headshots;
+    }
+
+    public void setHeadshots(Integer headshots) {
+        this.headshots = headshots;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Integer getPlace() {
+        return place;
+    }
+
+    public void setPlace(Integer place) {
+        this.place = place;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }
