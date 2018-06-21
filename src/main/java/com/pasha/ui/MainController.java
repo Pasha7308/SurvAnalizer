@@ -79,6 +79,9 @@ public class MainController {
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colDate.setMinWidth(30);
 
+        TableColumn<MatchCombined, String> colLevel = new TableColumn<>("Уровень");
+        colLevel.setCellValueFactory(new PropertyValueFactory<>("level"));
+
         TableColumn<MatchCombined, String> colId = new TableColumn<>("extId");
         colId.setCellValueFactory(new PropertyValueFactory<>("extId"));
         colId.setStyle("-fx-alignment: CENTER;");
@@ -104,7 +107,7 @@ public class MainController {
         TableColumn<MatchCombined, Double> colDKD = new TableColumn<>("dKD");
         colDKD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getKd() : null));
 
-        table.getColumns().setAll(colDate, colPK, colPD, colPKD, colId, colDK, colDD, colDKD);
+        table.getColumns().setAll(colDate, colLevel, colPK, colPD, colPKD, colId, colDK, colDD, colDKD);
         table.setItems(data);
     }
 

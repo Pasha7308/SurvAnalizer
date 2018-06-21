@@ -21,6 +21,27 @@ public class MatchCombined implements Serializable {
     @Column(nullable = false)
     private LocalDateTime matchDate;
 
+    @Column(nullable = false)
+    private String battlefield;
+
+    @Column(nullable = false)
+    private String mode;
+
+    @Column(nullable = false)
+    private String weather;
+
+    @Column(nullable = false)
+    private Integer team;
+
+    @Column(nullable = false)
+    private Boolean rating_match;
+
+    @Column(nullable = false)
+    private Boolean victory;
+
+    @Column(nullable = false)
+    private Integer level;
+
     @ManyToOne
     @JoinColumn(name = "pashaId")
     private MatchPerson pasha;
@@ -35,13 +56,6 @@ public class MatchCombined implements Serializable {
     public MatchCombined(Integer extId, LocalDateTime matchDate) {
         this.extId = extId;
         this.matchDate = matchDate;
-    }
-
-    public MatchCombined(Integer extId, LocalDateTime matchDate, MatchPerson pasha, MatchPerson daniil) {
-        this.extId = extId;
-        this.matchDate = matchDate;
-        this.pasha = pasha;
-        this.daniil = daniil;
     }
 
     public Long getId() {
@@ -66,6 +80,62 @@ public class MatchCombined implements Serializable {
 
     public void setMatchDate(LocalDateTime matchDate) {
         this.matchDate = matchDate;
+    }
+
+    public String getBattlefield() {
+        return battlefield;
+    }
+
+    public void setBattlefield(String battlefield) {
+        this.battlefield = battlefield;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public String getWeather() {
+        return weather;
+    }
+
+    public void setWeather(String weather) {
+        this.weather = weather;
+    }
+
+    public Integer getTeam() {
+        return team;
+    }
+
+    public void setTeam(Integer team) {
+        this.team = team;
+    }
+
+    public Boolean getRating_match() {
+        return rating_match;
+    }
+
+    public void setRating_match(Boolean rating_match) {
+        this.rating_match = rating_match;
+    }
+
+    public Boolean getVictory() {
+        return victory;
+    }
+
+    public void setVictory(Boolean victory) {
+        this.victory = victory;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     public MatchPerson getDaniil() {

@@ -14,6 +14,13 @@ public class MatchTranslator {
         MatchCombined matchCombined = new MatchCombined();
         matchCombined.setExtId(stat.getMatch().getId());
         matchCombined.setMatchDate(dateService.jodaDateToLocalDate(stat.getDate()));
+        matchCombined.setBattlefield(stat.getBattlefield().getTitle());
+        matchCombined.setMode(stat.getMode().getTitle());
+        matchCombined.setWeather(stat.getWeather().getTitle());
+        matchCombined.setTeam(stat.getTeam());
+        matchCombined.setRating_match(stat.getRating_match());
+        matchCombined.setVictory(stat.getVictory());
+        matchCombined.setLevel(stat.getLevel());
         return matchCombined;
     }
 }
