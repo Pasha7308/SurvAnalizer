@@ -22,8 +22,9 @@ public class MatchCombined implements Serializable {
     @Column(nullable = false)
     private String battlefield;
 
-    @Column(nullable = false)
-    private String mode;
+    @ManyToOne
+    @JoinColumn(name = "modeId")
+    private MatchMode mode;
 
     @Column(nullable = false)
     private String weather;
@@ -88,11 +89,11 @@ public class MatchCombined implements Serializable {
         this.battlefield = battlefield;
     }
 
-    public String getMode() {
+    public MatchMode getMode() {
         return mode;
     }
 
-    public void setMode(String mode) {
+    public void setMode(MatchMode mode) {
         this.mode = mode;
     }
 

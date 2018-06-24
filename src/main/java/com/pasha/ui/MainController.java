@@ -12,7 +12,7 @@ import com.pasha.service.Downloader;
 import com.pasha.service.MatchCombinedService;
 import com.pasha.service.MatchPersonService;
 import com.pasha.translator.MatchPersonTranslator;
-import com.pasha.translator.MatchTranslator;
+import com.pasha.translator.MatchCombinedTranslator;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -25,7 +25,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -38,7 +37,7 @@ public class MainController {
     // Инъекции Spring
     @Autowired private MatchCombinedService matchCombinedService;
     @Autowired private MatchPersonService matchPersonService;
-    @Autowired private MatchTranslator matchTranslator;
+    @Autowired private MatchCombinedTranslator matchCombinedTranslator;
     @Autowired private MatchPersonTranslator matchPersonTranslator;
     @Autowired private Analyzer analyzer;
 
@@ -87,6 +86,9 @@ public class MainController {
         colId.setCellValueFactory(new PropertyValueFactory<>("extId"));
         colId.setStyle("-fx-alignment: CENTER;");
 
+        TableColumn<MatchCombined, Integer> colMode = new TableColumn<>("Mode");
+        colMode.setCellValueFactory(p -> new ReadOnlyObjectWrapper(p.getValue().getMode().getName()));
+
         TableColumn<MatchCombined, Integer> colPK = new TableColumn<>("pK");
         colPK.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKills() : null));
         colPK.setStyle("-fx-alignment: CENTER-RIGHT;");
@@ -108,7 +110,7 @@ public class MainController {
         TableColumn<MatchCombined, Double> colDKD = new TableColumn<>("dKD");
         colDKD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getKd() : null));
 
-        table.getColumns().setAll(colDate, colLevel, colPK, colPD, colPKD, colId, colDK, colDD, colDKD);
+        table.getColumns().setAll(colDate, colLevel, colMode, colPK, colPD, colPKD, colId, colDK, colDD, colDKD);
         table.setItems(data);
     }
 
@@ -187,7 +189,7 @@ public class MainController {
             for (ExtMatchStat stat : extStats.getData()) {
                 MatchCombined matchCombined = matchCombinedService.findByExtId(stat.getMatch().getId());
                 if (matchCombined == null) {
-                    matchCombined = matchTranslator.extToLocal(stat);
+                    matchCombined = matchCombinedTranslator.extToLocal(stat);
                 }
                 matchCombined.setPlayer(player, matchPersonService.save(matchPersonTranslator.extToLocal(stat)));
                 matchCombinedService.save(matchCombined);
