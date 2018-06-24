@@ -14,7 +14,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <HBox alignment="CENTER" layoutX="21.0" layoutY="207.0" prefHeight="50.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="400.0">
+      <HBox alignment="CENTER" layoutX="21.0" layoutY="207.0" prefHeight="50.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <TableView fx:id="tableAnalytics" editable="true" minHeight="-Infinity" prefHeight="150.0" prefWidth="800.0" tableMenuButtonVisible="true" HBox.hgrow="ALWAYS">
                <HBox.margin>
