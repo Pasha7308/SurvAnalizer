@@ -20,7 +20,6 @@ public class MatchPersonTranslator {
         matchPerson.setHeadshots(stat.getHeadshots());
         matchPerson.setScore(stat.getScore());
         matchPerson.setPlace(stat.getPlace());
-        matchPerson.setLevel(stat.getLevel());
         return matchPerson;
     }
 }

@@ -87,14 +87,6 @@ public class MainController {
         colId.setCellValueFactory(new PropertyValueFactory<>("extId"));
         colId.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<MatchCombined, Integer> colPLev = new TableColumn<>("pLevel");
-        colPLev.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getLevel() : null));
-        colPLev.setStyle("-fx-alignment: CENTER;");
-
-        TableColumn<MatchCombined, Integer> colDLev = new TableColumn<>("pLevel");
-        colDLev.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getLevel() : null));
-        colDLev.setStyle("-fx-alignment: CENTER;");
-
         TableColumn<MatchCombined, Integer> colPK = new TableColumn<>("pK");
         colPK.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getPasha() != null) ? p.getValue().getPasha().getKills() : null));
         colPK.setStyle("-fx-alignment: CENTER-RIGHT;");
@@ -116,7 +108,7 @@ public class MainController {
         TableColumn<MatchCombined, Double> colDKD = new TableColumn<>("dKD");
         colDKD.setCellValueFactory(p -> new ReadOnlyObjectWrapper((p.getValue().getDaniil() != null) ? p.getValue().getDaniil().getKd() : null));
 
-        table.getColumns().setAll(colDate, colPLev, colLevel, colDLev, colPK, colPD, colPKD, colId, colDK, colDD, colDKD);
+        table.getColumns().setAll(colDate, colLevel, colPK, colPD, colPKD, colId, colDK, colDD, colDKD);
         table.setItems(data);
     }
 

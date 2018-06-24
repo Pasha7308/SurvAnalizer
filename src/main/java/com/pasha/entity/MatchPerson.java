@@ -47,9 +47,6 @@ public class MatchPerson implements Serializable {
     @Column
     private Integer place;
 
-    @Column
-    private Integer level;
-
     public MatchPerson() {
     }
 
@@ -155,13 +152,5 @@ public class MatchPerson implements Serializable {
 
     public void setPlace(Integer place) {
         this.place = place;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
     }
 }
