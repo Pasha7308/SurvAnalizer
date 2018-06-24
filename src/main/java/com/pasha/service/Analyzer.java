@@ -2,7 +2,6 @@ package com.pasha.service;
 
 import com.pasha.entity.MatchCombined;
 import com.pasha.entity.MatchPerson;
-import com.pasha.entity.MatchType;
 import com.pasha.entity.analytics.Person;
 import com.pasha.entity.analytics.ShowClass;
 import com.pasha.entity.analytics.ShowClassDesc;

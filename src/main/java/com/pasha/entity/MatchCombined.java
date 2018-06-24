@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static com.pasha.entity.MatchType.realData;
-
 @Entity
 @Table
 public class MatchCombined implements Serializable {
