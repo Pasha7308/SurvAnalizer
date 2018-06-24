@@ -22,7 +22,7 @@ public class MatchModeService {
     }
 
     public List<MatchMode> findAll() {
-        return repository.findAll();
+        return repository.findAllByOrderByNameAsc();
     }
 
     public MatchMode findByName(String name) {

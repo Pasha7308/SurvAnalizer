@@ -11,5 +11,6 @@ import java.util.List;
 @Transactional(propagation = Propagation.MANDATORY)
 public interface MatchModeRepository extends CrudRepository<MatchMode, Long> {
     List<MatchMode> findAll();
+    List<MatchMode> findAllByOrderByNameAsc();
     MatchMode findByName(String name);
 }

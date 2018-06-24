@@ -1,16 +1,15 @@
 package com.pasha.ui;
 
+import com.pasha.entity.Choice;
 import com.pasha.entity.MatchCombined;
+import com.pasha.entity.MatchMode;
 import com.pasha.entity.Player;
 import com.pasha.entity.analytics.ShowClass;
 import com.pasha.entity.analytics.ShowClassDesc;
 import com.pasha.entity.analytics.ShowFieldDesc;
 import com.pasha.entity.external.stats.ExtMatchStat;
 import com.pasha.entity.external.stats.ExtStats;
-import com.pasha.service.Analyzer;
-import com.pasha.service.Downloader;
-import com.pasha.service.MatchCombinedService;
-import com.pasha.service.MatchPersonService;
+import com.pasha.service.*;
 import com.pasha.translator.MatchPersonTranslator;
 import com.pasha.translator.MatchCombinedTranslator;
 import javafx.application.Platform;
@@ -20,10 +19,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,6 +36,7 @@ public class MainController {
     @Autowired private MatchPersonService matchPersonService;
     @Autowired private MatchCombinedTranslator matchCombinedTranslator;
     @Autowired private MatchPersonTranslator matchPersonTranslator;
+    @Autowired private MatchModeService matchModeService;
     @Autowired private Analyzer analyzer;
 
     // Инъекции JavaFX
@@ -47,6 +45,7 @@ public class MainController {
     @FXML private Button downloadButton;
     @FXML private Button analyzeButton;
     @FXML private ProgressBar progressBar;
+    @FXML private ChoiceBox modeChoice;
 
     // Variables
     private ObservableList<MatchCombined> data;
@@ -70,8 +69,8 @@ public class MainController {
 
     @SuppressWarnings("unchecked")
     private void initTable() {
-        List<MatchCombined> contacts = matchCombinedService.findAll();
-        data = FXCollections.observableArrayList(contacts);
+        List<MatchCombined> matches = matchCombinedService.findAll();
+        data = FXCollections.observableArrayList(matches);
 
         // Столбцы таблицы
         TableColumn<MatchCombined, String> colDate = new TableColumn<>("Date/Time");
@@ -86,7 +85,7 @@ public class MainController {
         colId.setCellValueFactory(new PropertyValueFactory<>("extId"));
         colId.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<MatchCombined, Integer> colMode = new TableColumn<>("Mode");
+        TableColumn<MatchCombined, Integer> colMode = new TableColumn<>("Режим");
         colMode.setCellValueFactory(p -> new ReadOnlyObjectWrapper(p.getValue().getMode().getName()));
 
         TableColumn<MatchCombined, Integer> colPK = new TableColumn<>("pK");
@@ -166,11 +165,25 @@ public class MainController {
             data = FXCollections.observableArrayList(matches);
             table.setItems(data);
 
+            fillChoices();
+
             downloadButton.setOnAction(action);
             analyzeButton.setDisable(false);
             Platform.runLater(() -> downloadButton.setText("Скачать"));
             stopped = false;
         }).start();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void fillChoices() {
+        List<MatchMode> modes = matchModeService.findAll();
+        ObservableList<Choice> choices = FXCollections.observableArrayList();
+        choices.add(new Choice(-1L, "All"));
+        for (MatchMode mode: modes) {
+            choices.add(new Choice(mode.getId(), mode.getName()));
+        }
+        modeChoice.setItems(choices);
+        Platform.runLater(() -> modeChoice.getSelectionModel().select(0));
     }
 
     private int countPlayer(Player player) {
